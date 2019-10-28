@@ -163,7 +163,8 @@ button {
 /* Overlay */
 
 #overlay {
-  display: flex;
+  /* change this back to flex */
+  display: none;
   flex-direction: column;
   position: fixed;
   color: #FFFFFF;
