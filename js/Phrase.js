@@ -1,24 +1,24 @@
 class Phrase {
-     constructor(phrase){
-         this.phrase = phrase.toLowerCase();
-         this.letters = this.phrase.split('');
+    constructor(phrase) {
+        this.phrase = phrase.toLowerCase();
+        this.letters = this.phrase.split('');
 
-         // DOM
-         this.phraseDiv = document.querySelector('#phrase');
-         this.letterLis = this.phraseDiv.firstElementChild.children;
+        // DOM
+        this.phraseDiv = document.querySelector('#phrase');
+        this.letterLis = this.phraseDiv.firstElementChild.children;
 
-         // Bindings
-         this.addPhraseToDisplay = this.addPhraseToDisplay.bind(this);
-         this.checkLetter = this.checkLetter.bind(this);
-         this.showMatchedLetter = this.showMatchedLetter.bind(this);
-     }
+        // Bindings
+        this.addPhraseToDisplay = this.addPhraseToDisplay.bind(this);
+        this.checkLetter = this.checkLetter.bind(this);
+        this.showMatchedLetter = this.showMatchedLetter.bind(this);
+    }
 
-     // Adds letter placeholders to the display when the game starts.  
+    // Adds letter placeholders to the display when the game starts.  
     addPhraseToDisplay() {
         // New fragment to hold placeholder elements
         const frag = document.createDocumentFragment();
         // Create placeholder elements and append to frag
-        this.letters.forEach( (letter) => {
+        this.letters.forEach((letter) => {
             const li = document.createElement('li');
             // Test for whether this is a letter or a space
             const isLetter = /\w/.test(letter);
@@ -37,8 +37,8 @@ class Phrase {
         // letters of the phrase. Whenever a letter matches the
         // key clicked by the user, return the letter's index
         const showThese = [];
-        this.letters.forEach( (letter, index) => {
-            if(e.target.textContent === letter){
+        this.letters.forEach((letter, index) => {
+            if (e.target.textContent === letter) {
                 showThese.push(index);
             };
         });
@@ -49,15 +49,13 @@ class Phrase {
     // Reveals the letter(s) on the board that matches the player's 
     // selection. 
     showMatchedLetter(e) {
-        // Replace each selected element's 'hide' class with the
-        // 'show' class.
-        const indices = this.checkLetter(e);
-        indices.forEach( (theIndex) => {
-            const theLi = this.letterLis[theIndex];
-            if(theLi){
+         // Replace each selected element's 'hide' class with the
+            // 'show' class.
+            const indices = this.checkLetter(e);
+            indices.forEach((theIndex) => {
+                const theLi = this.letterLis[theIndex];
                 theLi.classList.toggle('hide');
                 theLi.classList.toggle('show');
-            }
-        });
+            });
     }
 }
