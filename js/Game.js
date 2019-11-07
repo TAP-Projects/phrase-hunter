@@ -1,3 +1,4 @@
+// The Game class manages the game. 
 class Game {
     constructor(missed, phrases, activePhrase) {
         // Missed attempts to guess a letter
@@ -13,6 +14,9 @@ class Game {
         // The currently active phrase
         this.activePhrase = null;
 
+        // The phrase instance
+        this.phraseInst = null;
+
         // Bindings
         this.startGame = this.startGame.bind(this);
         this.getRandomPhrase = this.getRandomPhrase.bind(this);
@@ -27,14 +31,18 @@ class Game {
     startGame() {
         // Hide the overlay
         document.querySelector('#overlay').style.display = 'none';
-        // Get a new random phrase
-        const thePhrase = this.getRandomPhrase();
         // Set the value of 'activePhrase'
-        this.activePhrase = thePhrase;
+        this.activePhrase = this.getRandomPhrase();
         // Instantiate a phrase instance and add the phrase to the
         // display
-        const phraseInst = new Phrase(thePhrase);
-        phraseInst.addPhraseToDisplay();
+        this.phraseInst = new Phrase(this.activePhrase);
+        this.phraseInst.addPhraseToDisplay();
+
+        // Add an event listener that listens for the click event on
+        // the key button, and then checks whether that key is in the
+        // in the current word or phrase by calling handleInteraction()
+        const qwerty = document.querySelector('#qwerty');
+        qwerty.addEventListener('click', this.handleInteraction);
 
     }
 
@@ -43,9 +51,6 @@ class Game {
         return this.phrases[Math.floor(Math.random() * 5)];
     }
 
-    //NOTE: How am I passing around the phrase instance? How is 
-    // showMatchedLetter getting it? Do I need to re-instantiate
-    // the instance
     // Handle player actions
     // handleInteraction is called in app.js by the key button
     // event listener. The event target is the key button that
@@ -55,36 +60,49 @@ class Game {
     // In the former case, it calls showMatchedLetter, and in 
     // latter case, it calls removeLife.
     handleInteraction(e) {
-        const theLetter = e.target.textContent;
-        // Get the letter button that was just pressed
-        const pressedKey = document.querySelector(`.${theLetter}`);
-        // If that letter is in the phrase, then 
-        if(this.activePhrase.indexOf(theLetter)){
+        // Get the key that was just pressed
+        const theLetter = e.target;
+        // Get the text of the key that was just pressed
+        const theLetterText = e.target.textContent;
+        // Store theLetter's current classes
+        let classes = theLetter.className;
+        // If theLetter is in the DOM, then
+        if(this.activePhrase.includes(theLetterText)){  
             // Add the 'chosen' class
-            let classes = pressedKey.className;
             classes += ' chosen';
-            pressedKey.className = classes;
+            theLetter.className = classes;
             // Call showMatchedLetter
-            phrase.showMatchedLetter(e);
+            this.phraseInst.showMatchedLetter(e);
 
         } else {
             // Add the 'wrong' class
-            let classes = pressedKey.className;
             classes += ' wrong';
-            pressedKey.className = classes;
+            theLetter.className = classes;
             // Remove a life
             this.removeLife();
         }        
         
         // Check to see if the game has been won with checkForWin
         // and if so, call gameOver()
+        if(this.checkForWin()){
+            this.gameOver()
+        }
     
     }
         
 
-    removeLife() {}
+    removeLife() {
+        console.log("Remove life fired")
+    }
+    
+    checkForWin() {
+        console.log("check for win fired");
+        return false;
+        
+    }
+    
+    gameOver() {
+        console.log("Game over fired")
 
-    checkForWin() {}
-
-    gameOver() {}
+    }
 }
