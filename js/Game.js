@@ -1,6 +1,6 @@
 // The Game class manages the game. 
 class Game {
-    constructor(missed, phrases, activePhrase) {
+    constructor() {
         // Missed attempts to guess a letter
         this.missed = 0;
         // Possible phrases
