@@ -103,10 +103,9 @@ class Game {
         
 
     removeLife() {
-        if(this.missed < 5){
-            this.hearts[this.hearts.length - 1 - this.missed].src = 'images/lostHeart.png';
-            this.missed++;
-        } else {
+        this.hearts[this.hearts.length - 1 - this.missed].src = 'images/lostHeart.png';
+        this.missed++;
+        if(this.missed === 5){
             this.gameOver(false);
         }
     }

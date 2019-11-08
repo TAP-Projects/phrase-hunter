@@ -1,3 +1,5 @@
+//!NOTE: BUG - spaces are able to take on both the hide and show classes at the same time
+
 const ul = document.querySelector('#phrase ul');
 const buttons = document.querySelectorAll('#qwerty button');
 const hearts = document.querySelectorAll('img.heart');
@@ -10,6 +12,9 @@ document.querySelector('#btn__reset').addEventListener('click', () => {
     buttons.forEach(button => button.className = 'key');
     // Reset the hearts
     hearts.forEach(heart => heart.src = 'images/liveHeart.png');
+    // I'm not sure that this is necessary. I wanted to
+    // overwrite the previous game instance
+    let newGame = null;
     // Create a new game instance
     newGame = new Game();
     // Start the new game
