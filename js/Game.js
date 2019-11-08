@@ -17,11 +17,13 @@ class Game {
         // The phrase instance
         this.phraseInst = null;
 
-        // Memo for pressed letters
+        // This string stores all of the used letters. It's then
+        // used to test whether a key has previously been
+        // clicked/pressed
         this.lettersUsed = '';
 
         // Hearts images
-        this.hearts = document.querySelectorAll('.heart');
+        this.hearts = document.getElementsByClassName('.heart');
 
         // Bindings
         this.startGame = this.startGame.bind(this);
@@ -29,7 +31,6 @@ class Game {
         this.handleInteraction = this.handleInteraction.bind(this);
     }
 
-    // Start the game
     // startGame is called in app.js by an event listener on the
     // reset button. It hides the start screen overlay; generates
     // a new random phrase; instantiates the phrase instance and
@@ -46,7 +47,7 @@ class Game {
 
         // Add an event listener that listens for the click event on
         // the key button, and then checks whether that key is in the
-        // in the current word or phrase by calling handleInteraction()
+        // current word or phrase by calling handleInteraction()
         const qwerty = document.querySelector('#qwerty');
         qwerty.addEventListener('click', this.handleInteraction);
 
@@ -54,95 +55,123 @@ class Game {
 
     // Get a random phrase from the array of phrases
     getRandomPhrase() {
-        return this.phrases[Math.floor(Math.random() * 5)];
+        return this.phrases[Math.floor(Math.random() * this.phrases.length)];
     }
 
-    // Handle player actions
-    // handleInteraction is called in app.js by the key button
-    // event listener. The event target is the key button that
-    // was just pressed. handleInteraction decorates the key 
+    // handleInteraction is called in app.js by the letter-button
+    // event listener. The event target is the letter-button that
+    // was just pressed/clicked. handleInteraction decorates the key 
     // using either the 'chosen' class or 'wrong' class depending
-    // on whether the key that was pressed is in the active phrase.
+    // on whether the key that was pressed/clicked is in the phrase.
     // In the former case, it calls showMatchedLetter, and in 
     // latter case, it calls removeLife.
     handleInteraction(e) {
-        // Gotta click on a button. 
-        if(e.target.nodeName === 'BUTTON'){
-            // Get the key that was just pressed
-            const theLetter = e.target;
-            // Get the text of the key that was just pressed
-            const theLetterText = e.target.textContent;
-            // Add the letter to the list of used letters
-            if(!this.lettersUsed.includes(theLetterText)){
-                this.lettersUsed += theLetterText;
-            } else {
-                return;
+
+        // Get the key/button that was just pressed/clicked
+        const theLetter = e.target;
+        // Get the text of the key/button that was just 
+        // pressed/clicked
+        const theLetterText = e.target.textContent;
+        
+        // A couple of escape conditions:
+        // 1. If the area clicked wasn't a button, exit the function
+        // (When using bubbling, you need to make sure you've got
+        // the target element you were after.)
+        if(e.target.nodeName !== 'BUTTON') return;
+        // 2. If the letter clicked has been clicked previously,
+        // exit the function. This effectively 'disables' the
+        // letter.
+        if(this.lettersUsed.includes(theLetterText)) return;
+            
+        // Add the letter to our list of used letters
+        this.lettersUsed += theLetterText;
+        
+        // If the phrase includes the letter, then...
+        if(this.activePhrase.includes(theLetterText)){  
+            // Add the 'chosen' class to the letter-button
+            theLetter.className = 'key chosen';
+            // Call showMatchedLetter
+            this.phraseInst.showMatchedLetter(e);
+            // Check to see if the game has been won 
+            if(this.checkForWin()){
+                this.gameOver(true);
             }
-            // Store theLetter's current classes
-            let classes = theLetter.className;
-            // If theLetter is in the DOM, then
-            if(this.activePhrase.includes(theLetterText)){  
-                // Add the 'chosen' class
-                classes += ' chosen';
-                theLetter.className = classes;
-                // Call showMatchedLetter
-                this.phraseInst.showMatchedLetter(e);
-                // Check to see if the game has been won 
-                if(this.checkForWin()){
-                    this.gameOver(true);
-                }
-            } else {
-                // Add the 'wrong' class
-                classes += ' wrong';
-                theLetter.className = classes;
-                // Remove a life
-                this.removeLife();
-            }   
-    }     
+        } else {
+            // Add the 'wrong' class to the letter-button
+            theLetter.className = 'key wrong';
+            // Remove a life
+            this.removeLife();
+        }      
     }
         
-
+    // If the user chooses an incorrect letter, remove a life.
+    // If the number of misses reaches 5, call gameOver()
     removeLife() {
-        this.hearts[this.hearts.length - 1 - this.missed].src = 'images/lostHeart.png';
+        // Replace the full heart image with an empty heart image
+        // Access the hearts array at the end of that array
+        // and then proceed to the left as this.missed increases
+        this.hearts[(this.hearts.length - 1) - this.missed].src = 'images/lostHeart.png';
+        // Increment the number of misses
         this.missed++;
-        if(this.missed === 5){
+        // When the user reaches the max misses, call gameOver()
+        if(this.missed >= this.hearts.length){
             this.gameOver(false);
         }
     }
     
     // Check to see if the player has won or lost
     checkForWin() {
-        // If the phrase as it appears on the page contains no
-        // hidden elements, then the player has won
+        // If the phrase contains no hidden elements, then 
+        //the player has won, so...
+        
+        // Get all of the phrase LIs and convert them to a JS
+        // array
         let theLis = [...document.querySelectorAll('#phrase ul li')];
-        const hiddenLis = theLis.filter(li => li.className.includes('hide'));        
+        // Filter the LIs for any that include the 'hide' class
+        // and store those in hiddenLis
+        const hiddenLis = theLis.filter(li => li.className.includes('hide'));
+        // If hiddenLis is empty, the player has revealed all
+        // of the letters and they've won.        
         if(hiddenLis.length === 0){
-            // Then they've won
             return true;
         }
-        // Or they haven't won yet
+        // Otherwise, they haven't won yet
         return false;
     }
     
-    // Is the game over? Did the player win or lose?
+    // gameOver() takes a boolean parameter indicating a win or
+    // loss and shows the overlay  with an appropriate
+    // message
     gameOver(won) {
-        // Get the overlay
+
+        // Reset the game:
+        // Overwrite the ul's contents
+        const ul = document.querySelector('#phrase ul');
+        ul.innerHTML = '';
+        // Reset the classes on the key buttons
+        const buttons = document.querySelectorAll('#qwerty button');
+        buttons.forEach(button => button.className = 'key');
+        // Reset the hearts
+        const hearts = document.querySelectorAll('img.heart');
+        hearts.forEach(heart => heart.src = 'images/liveHeart.png');
+        
+        // Get the overlay element
         const overlay = document.querySelector('#overlay');
         // Get the game-over-message
         const message = document.querySelector('h1#game-over-message');
-        // Replace start screen
+        // Reveal the overlay again by switching from display
+        // none to display flex
         overlay.style.display = 'flex';
+        // If the player has won, then...
         if(won){
-            console.log('you won!')
-            // Apply the 'win' style
+            // Apply the 'win' style to the overlay
             overlay.className = 'win';
-            // Show message
+            // Show a congratulatory message
             message.textContent = 'Congratulations! You won!'
-        }
-        else {
-            // Apply the 'lose' style
+        } else {
+            // Apply the 'lose' style to the overlay
             overlay.className = 'lose';
-            // Show message
+            // Show a sympathy message
             message.textContent = 'You lost! Better luck next time.'
         }
 
