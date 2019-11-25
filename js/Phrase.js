@@ -1,14 +1,14 @@
-// The Phrase class takes a phrase and provides methods for dispalying
+// The Phrase class takes a phrase and provides methods for displaying
 // it on the screen, checking whether an entered letter matches 
 // a letter in the phrase, and showing matched letters 
 class Phrase {
     constructor(phrase) {
-        this.phrase = phrase.toLowerCase();
-        this.letters = this.phrase.split('');
+        this.phrase = phrase.toLowerCase().trim();
+        this.letters = this.phrase.split(''); //?
 
         // DOM
-        this.phraseDiv = document.querySelector('#phrase');
-        this.letterLis = this.phraseDiv.firstElementChild.children;
+        this.phraseDiv = document.getElementById('phrase');
+        this.letterLis = this.phraseDiv.firstElementChild.children; //HTML collection
 
         // Bindings
         this.addPhraseToDisplay = this.addPhraseToDisplay.bind(this);
@@ -40,6 +40,7 @@ class Phrase {
     // letter in the phrase and returns an array of indices for the 
     // matches.
     checkLetter(e) {
+        //!NOTE: this is a convoluted way to do this.
         // Create an array of indices by looping through the 
         // letters of the phrase. Whenever a letter matches the
         // key clicked by the user, return the letter's index
@@ -60,6 +61,7 @@ class Phrase {
         // 'show' class.
         const indices = this.checkLetter(e);
         indices.forEach((theIndex) => {
+                // theLi corresponds to a letter placeholder on the page
                 const theLi = this.letterLis[theIndex];
                 theLi.classList.toggle('hide');
                 theLi.classList.toggle('show');

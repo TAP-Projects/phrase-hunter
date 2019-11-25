@@ -14,6 +14,7 @@ class Game {
         // The currently active phrase
         this.activePhrase = null;
 
+        //!NOTE: this is weird
         // The phrase instance
         this.phraseInst = null;
 
@@ -23,7 +24,7 @@ class Game {
         this.lettersUsed = '';
 
         // Hearts images
-        this.hearts = document.getElementsByClassName('.heart');
+        this.hearts = document.getElementsByClassName('.heart'); //HTML collection
 
         // Bindings
         this.startGame = this.startGame.bind(this);
@@ -36,10 +37,15 @@ class Game {
     // a new random phrase; instantiates the phrase instance and
     // displays the phrase on the screen
     startGame() {
+
         // Hide the overlay
         document.querySelector('#overlay').style.display = 'none';
+
         // Set the value of 'activePhrase'
         this.activePhrase = this.getRandomPhrase();
+
+        //!NOTE: You don't have to do this in Game. I could do it
+        // in app.js
         // Instantiate a phrase instance and add the phrase to the
         // display
         this.phraseInst = new Phrase(this.activePhrase);
@@ -48,7 +54,7 @@ class Game {
         // Add an event listener that listens for the click event on
         // the key button, and then checks whether that key is in the
         // current word or phrase by calling handleInteraction()
-        const qwerty = document.querySelector('#qwerty');
+        const qwerty = document.getElementById('qwerty');
         qwerty.addEventListener('click', this.handleInteraction);
 
     }
@@ -82,7 +88,11 @@ class Game {
         // exit the function. This effectively 'disables' the
         // letter.
         if(this.lettersUsed.includes(theLetterText)) return;
-            
+        
+        //!NOTE: Not 100% sure this is necessary
+        // Reset the letter button's class
+        theLetter.className = 'key';
+
         // Add the letter to our list of used letters
         this.lettersUsed += theLetterText;
         
@@ -112,7 +122,7 @@ class Game {
         // and then proceed to the left as this.missed increases
         this.hearts[(this.hearts.length - 1) - this.missed].src = 'images/lostHeart.png';
         // Increment the number of misses
-        this.missed++;
+        this.missed += 1;
         // When the user reaches the max misses, call gameOver()
         if(this.missed >= this.hearts.length){
             this.gameOver(false);
