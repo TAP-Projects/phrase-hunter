@@ -1,4 +1,4 @@
-// The Phrase class takes a phrase and provides methods for dispalying
+// The Phrase class takes a phrase and provides methods for displaying
 // it on the screen, checking whether an entered letter matches 
 // a letter in the phrase, and showing matched letters 
 class Phrase {
@@ -53,6 +53,7 @@ class Phrase {
     // letter in the phrase and returns an array of indices for the 
     // matches.
     checkLetter(e) {
+        //!NOTE: this is a convoluted way to do this.
         // Create an array of indices by looping through the 
         // letters of the phrase. Whenever a letter matches the
         // key clicked by the user, return the letter's index
