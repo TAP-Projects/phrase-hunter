@@ -23,7 +23,7 @@ class Game {
         this.lettersUsed = '';
 
         // Hearts images
-        this.hearts = document.getElementsByClassName('.heart');
+        this.hearts = document.getElementsByClassName('heart');
 
         // Bindings
         this.startGame = this.startGame.bind(this);
@@ -37,7 +37,7 @@ class Game {
     // displays the phrase on the screen
     startGame() {
         // Hide the overlay
-        document.querySelector('#overlay').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
         // Set the value of 'activePhrase'
         this.activePhrase = this.getRandomPhrase();
         // Instantiate a phrase instance and add the phrase to the
@@ -48,7 +48,7 @@ class Game {
         // Add an event listener that listens for the click event on
         // the key button, and then checks whether that key is in the
         // current word or phrase by calling handleInteraction()
-        const qwerty = document.querySelector('#qwerty');
+        const qwerty = document.getElementById('qwerty');
         qwerty.addEventListener('click', this.handleInteraction);
 
     }
@@ -114,7 +114,7 @@ class Game {
         // Increment the number of misses
         this.missed++;
         // When the user reaches the max misses, call gameOver()
-        if(this.missed >= this.hearts.length){
+        if(this.missed === this.hearts.length){
             this.gameOver(false);
         }
     }
@@ -156,7 +156,7 @@ class Game {
         hearts.forEach(heart => heart.src = 'images/liveHeart.png');
         
         // Get the overlay element
-        const overlay = document.querySelector('#overlay');
+        const overlay = document.getElementById('overlay');
         // Get the game-over-message
         const message = document.querySelector('h1#game-over-message');
         // Reveal the overlay again by switching from display

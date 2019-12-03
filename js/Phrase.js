@@ -3,11 +3,11 @@
 // a letter in the phrase, and showing matched letters 
 class Phrase {
     constructor(phrase) {
-        this.phrase = phrase.toLowerCase();
-        this.letters = this.phrase.split('');
+        this.phrase = phrase.toLowerCase().trim();
+        this.lettersInPhrase = this.phrase.split('');
 
         // DOM
-        this.phraseDiv = document.querySelector('#phrase');
+        this.phraseDiv = document.getElementById('phrase');
         this.letterLis = this.phraseDiv.firstElementChild.children;
 
         // Bindings
@@ -21,7 +21,7 @@ class Phrase {
         // New fragment to hold placeholder elements
         const frag = document.createDocumentFragment();
         // Create placeholder elements and append to frag
-        this.letters.forEach((letter) => {
+        this.lettersInPhrase.forEach((letter) => {
             const li = document.createElement('li');
             // Test for whether this is a letter or a space
             const isLetter = /\w/.test(letter);
@@ -36,23 +36,6 @@ class Phrase {
         this.phraseDiv.firstElementChild.append(frag);
     }
 
-    // Checks to see if the letter selected by the player matches a 
-    // letter in the phrase and returns an array of indices for the 
-    // matches.
-    checkLetter(e) {
-        // Create an array of indices by looping through the 
-        // letters of the phrase. Whenever a letter matches the
-        // key clicked by the user, return the letter's index
-        const showThese = [];
-        this.letters.forEach((letter, index) => {
-            if (e.target.textContent === letter) {
-                showThese.push(index);
-            };
-        });
-        // Return the array of indices
-        return showThese;
-    }
-
     // Reveals the letter(s) on the board that matches the player's 
     // selection. 
     showMatchedLetter(e) {
@@ -64,5 +47,22 @@ class Phrase {
                 theLi.classList.toggle('hide');
                 theLi.classList.toggle('show');
             });
+    }
+
+    // Checks to see if the letter selected by the player matches a 
+    // letter in the phrase and returns an array of indices for the 
+    // matches.
+    checkLetter(e) {
+        // Create an array of indices by looping through the 
+        // letters of the phrase. Whenever a letter matches the
+        // key clicked by the user, return the letter's index
+        const showThese = [];
+        this.lettersInPhrase.forEach((letter, index) => {
+            if (e.target.textContent === letter) {
+                showThese.push(index);
+            };
+        });
+        // Return the array of indices
+        return showThese;
     }
 }
