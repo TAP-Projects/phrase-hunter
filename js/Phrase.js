@@ -40,7 +40,7 @@ class Phrase {
         // Replace each selected element's 'hide' class with the 'show' class.
         const indices = this.checkLetter(e);
         indices.forEach((theIndex) => {
-                const theLi = phraseLetters[theIndex];
+                const theLi = this.lettersInPhrase[theIndex];
                 //!NOTE: I think this may be a problem
                 theLi.classList.toggle('hide');
                 theLi.classList.toggle('show');

@@ -34,7 +34,7 @@ class Game {
         lettersUsed += theLetterText;
         
         // If the phrase includes the letter, then decorate the letter-button with the 'chosen' class, and call showMatchedLetter. Finally, check to see if the game has been won. If so, call gameOver('won'), else decorate the letter-button with the 'wrong' class and remove a life.
-        if(activePhrase.includes(theLetterText)){  
+        if(activePhrase.lettersInPhrase.indexOf(theLetterText)){  
             theLetter.className = 'key chosen';
             activePhrase.showMatchedLetter(e);
             if(this.checkForWin()) this.gameOver('won');
@@ -54,7 +54,7 @@ class Game {
     
     // Check to see if the player has won or lost. If the phrase contains no hidden elements, then the player has won, so I get all of the phrase LIs and convert them to an array, then filter them any that include the 'hide' class. If that list is empty, I return true.
     checkForWin() {
-        if([...theLis].filter(li => li.className.includes('hide')) === 0) return true;
+        if([...phraseLetters].filter(li => li.className.includes('hide')) === 0) return true;
         return false;
     }
     

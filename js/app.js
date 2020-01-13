@@ -21,7 +21,7 @@ activePhrase.addPhraseToDisplay();
 let currentGame = new Game();
 
 // Add an event listener that listens for the click event on a key button, and then checks whether that key is in the current word or phrase by calling handleInteraction()
-qwertyKey.addEventListener('click', currentGame.handleInteraction);
+qwertyContainer.addEventListener('click', currentGame.handleInteraction);
 
 // On button click, create a new game instance and start the game by calling startGame().
 gameResetButton.addEventListener('click', () => {
