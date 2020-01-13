@@ -1,16 +1,31 @@
 //!NOTE: BUG - spaces are able to take on both the hide and show classes at the same time
-
-// - While it isn't explicitly stated as a requirement, the checkLetter method typically just returns true or false based on whether or not the letter is in the phrase.
-
-// - There should be an event listener in app.js that listens for onscreen keyboard events and calls the handleInteraction method. It looks like you are doing this in Game.js in the startGame method instead.
+//!NOTE: BUG - hearts don't reduce when incorrect letters are chosen
 
 
-// On button click, create a new game instance and start the 
-// game by calling startGame().
-document.querySelector('#btn__reset').addEventListener('click', () => {
-    
-    // I'm not sure that this is necessary. I wanted to
-    // overwrite the previous game instance
+// Possible phrases
+const phrases = [
+    'love peace and harmony',
+    'oh very nice very nice very nice',
+    'oh but maybe in the next world',
+    'maybe in the next world',
+    'oh'
+];
+
+let wrongGuesses = 0;
+let lettersUsed = '';
+
+// Instantiate a phrase instance and add the phrase to the display
+let activePhrase = new Phrase(phrases);
+activePhrase.addPhraseToDisplay();
+
+let currentGame = new Game();
+
+// Add an event listener that listens for the click event on a key button, and then checks whether that key is in the current word or phrase by calling handleInteraction()
+qwertyKey.addEventListener('click', currentGame.handleInteraction);
+
+// On button click, create a new game instance and start the game by calling startGame().
+gameResetButton.addEventListener('click', () => {
+    // I'm not sure that this is necessary. I wanted to  overwrite the previous game instance
     let newGame = null;
     // Create a new game instance
     newGame = new Game();
