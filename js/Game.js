@@ -13,12 +13,12 @@ class Game {
         // Is this a click event or a keydown event?
 		if (e.type === "click") {
 
-			// If the area clicked wasn't a button, exit the function.
-            if (theLetterLI.nodeName !== "BUTTON") return;
-
-            // Otherwise get the list item from e.target and the letter value
+			// Otherwise get the list item from e.target and the letter value
 			theLetterLI = e.target;
 			theClickedLetterText = theLetterLI.textContent;
+			
+			// If the area clicked wasn't a button, exit the function.
+            if (theLetterLI.nodeName !== "BUTTON") return;
 
         } else if (e.type === "keydown") {
             
