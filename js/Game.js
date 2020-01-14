@@ -7,8 +7,6 @@ class Game {
 
 	// handleInteraction is called in app.js by the letter-button event listener. The event target is the letter-button that  was just pressed/clicked. handleInteraction decorates the key using either the 'chosen' class or 'wrong' class depending on whether the key that was pressed/clicked is in the phrase. In the former case, it calls showMatchedLetter, and in latter case, it calls removeLife.
 	handleInteraction(e) {
-
-        console.log(e)
         
         let theLetterLI, theClickedLetterText;
         
@@ -65,7 +63,6 @@ class Game {
 		const hiddenLetterLIs = [...phraseLetterLis].filter(letterLI =>
 			letterLI.className.includes("hide")
 		);
-		console.log("The hidden letter list items are: ", hiddenLetterLIs);
 		if (hiddenLetterLIs.length <= 0) return true;
 		else return false;
 	}
