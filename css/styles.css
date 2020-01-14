@@ -163,7 +163,7 @@ button {
 /* Overlay */
 
 #overlay {
-  display: flex;
+  display: none;
   flex-direction: column;
   position: fixed;
   color: #FFFFFF;
@@ -173,6 +173,10 @@ button {
   left: 0;
   right: 0;
   border-radius: 5px;
+}
+
+.show-overlay {
+  display: flex !important;
 }
 
 .title {
@@ -201,4 +205,31 @@ button {
 
 .lose a {
   color: var(--color-lose);
+}
+
+.fade-in {
+  animation: fadeIn ease .6s;
+  /* animation-fill-mode: forwards; */
+}
+@keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+.fade-out {
+  animation: fadeOut ease .6s;
+  /* animation-fill-mode: forwards; */
+
+}
+@keyframes fadeOut {
+  0% {
+    opacity:1;
+  }
+  100% {
+    opacity:0;
+  }
 }
