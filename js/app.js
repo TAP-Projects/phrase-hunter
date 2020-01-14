@@ -31,6 +31,7 @@ gameResetButton.addEventListener('click', () => {
     
     // Add an event listener that listens for the click event on a key button, and then checks whether that key is in the current word or phrase by calling handleInteraction()
     qwertyContainer.addEventListener('click', currentGame.handleInteraction);
+    document.addEventListener('keydown', currentGame.handleInteraction);
     
     // Hide the overlay
     overlay.className = ""
