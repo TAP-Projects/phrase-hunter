@@ -1,60 +1,109 @@
 // The Game class manages the game.
 class Game {
 	constructor() {
+		
+		// Possible phrases
+		this.phrases = [
+			"love peace and harmony",
+			"oh very nice very nice very nice",
+			"oh but maybe in the next world",
+			"maybe in the next world",
+			"oh"
+		];
+
+		// The currently active phrase
+		this.activePhrase = '';
+
+		// The letters in the active phrase
+		this.phraseLetters = [];
+
+		// Letters that have been guessed so far
+		this.lettersUsed = [];
+
+		// Incorrect guesses
+		this.missed = 0;
+
 		// Bindings
+		this.getRandomPhrase = this.getRandomPhrase.bind(this);
 		this.handleInteraction = this.handleInteraction.bind(this);
+	}
+
+	// Start the game
+	startGame() {
+
+		// Fade in the board
+		document.getElementById("theBoard").style.display = "block";
+		document.getElementById("theBoard").className = "fade-in";
+
+		// Set the active phrase
+		this.activePhrase = this.getRandomPhrase();
+		// Set the phrase letters 
+		this.phraseLetters = this.activePhrase.trim().toLowerCase().split("");
+
+		// Add the phrase to the display
+		currentPhrase.addPhraseToDisplay(this.phraseLetters);
+
+		// Hide the overlay
+		overlay.className = ""
+	}
+
+	// Get a random phrase from the array of phrases
+	getRandomPhrase() {
+		return this.phrases[Math.floor(Math.random() * this.phrases.length)];
 	}
 
 	// handleInteraction is called in app.js by the letter-button event listener. The event target is the letter-button that  was just pressed/clicked. handleInteraction decorates the key using either the 'chosen' class or 'wrong' class depending on whether the key that was pressed/clicked is in the phrase. In the former case, it calls showMatchedLetter, and in latter case, it calls removeLife.
 	handleInteraction(e) {
-        
-        let theLetterLI, theClickedLetterText;
-        
-        // Is this a click event or a keydown event?
+
+		// These will stand in for both click and keyboard events
+		let theKeyButtonLI, theClickedKeyButtonText;
+
+		// Is this a click event or a keydown event?
+		// Click
 		if (e.type === "click") {
-
 			// Otherwise get the list item from e.target and the letter value
-			theLetterLI = e.target;
-			theClickedLetterText = theLetterLI.textContent;
-			
+			theKeyButtonLI = e.target;
+			theClickedKeyButtonText = theKeyButtonLI.textContent;
+
 			// If the area clicked wasn't a button, exit the function.
-            if (theLetterLI.nodeName !== "BUTTON") return;
+			if (theKeyButtonLI.nodeName !== "BUTTON") return;
 
-        } else if (e.type === "keydown") {
-            
-            // Get the letter value from the key property
-            theClickedLetterText = e.key;
+		// Keydown			
+		} else if (e.type === "keydown") {
+			// Get the letter value from the key property
+			theClickedKeyButtonText = e.key;
 
-            // Use the letter value to find the matching on-screen key button
-            theLetterLI = [...qwertyKeys].find(keyButton => keyButton.textContent === theClickedLetterText);
+			// Use the letter value to find the matching on-screen key button list item
+			theKeyButtonLI = [...qwertyKeys].find(
+				keyButton => keyButton.textContent === theClickedKeyButtonText
+			);
+		}
 
-        }
-            
-        // If the letter clicked has been clicked previously, exit the function.
-        if (lettersUsed.includes(theClickedLetterText)) return;
+		// If the letter clicked has been clicked previously, exit the function.
+		if (this.lettersUsed.includes(theClickedKeyButtonText)) return;
 
-        // Reset the letter button's class
-        theLetterLI.className = "key";
+		// Reset the letter button's class
+		if(theKeyButtonLI) theKeyButtonLI.className = "key";
 
-        // Add the letter to our list of used letters
-        lettersUsed += theClickedLetterText;
+		// Add the letter to our list of used letters
+		this.lettersUsed += theClickedKeyButtonText;
 
-        // If the phrase includes the letter, the letter-button gets the 'chosen' class, and the letters in the phrase get 'show'. If not, the letter-button gets the 'wrong' class and we remove a life.
-        if (activePhrase.checkLetter(theClickedLetterText)) {
-            theLetterLI.className = "key chosen";
-            activePhrase.showMatchedLetter(theClickedLetterText);
-            if (this.checkForWin()) this.gameOver("won");
-        } else {
-            theLetterLI.className = "key wrong";
-            this.removeLife();
-        }
+		// If the phrase includes the letter, the letter-button gets the 'chosen' class, and the letters in the phrase get 'show'. If not, the letter-button gets the 'wrong' class and we remove a life.
+		if (currentPhrase.checkLetter(this.phraseLetters, theClickedKeyButtonText)) {
+			theKeyButtonLI.className = "key chosen";
+			currentPhrase.showMatchedLetter(this.phraseLetters, theClickedKeyButtonText);
+			if (this.checkForWin()) this.gameOver("won");
+		} else {
+			theKeyButtonLI.className = "key wrong";
+			this.removeLife();
+		}
 	}
 
 	// If the user chooses an incorrect letter, remove a life. If the number of misses reaches 5, call gameOver('lost')
 	removeLife() {
-		hearts[hearts.length - 1 - wrongGuesses].src = "images/lostHeart.png";
-		wrongGuesses += 1;
-		if (wrongGuesses === hearts.length) this.gameOver("lost");
+		hearts[hearts.length - 1 - this.missed].src = "images/lostHeart.png";
+		this.missed += 1;
+		if (this.missed === hearts.length) this.gameOver("lost");
 	}
 
 	// Check to see if the player has won or lost. If the phrase contains no hidden elements, then the player has won, so I get all of the phrase LIs and convert them to an array, then filter them any that include the 'hide' class. If that list is empty, I return true.
@@ -101,13 +150,13 @@ class Game {
 				setTimeout(cb, timer);
 			};
 
-			// Reset the game: Overwrite the phrase list contents; reset the classes on the key buttons; reset the hearts; reset wrongGuesses and lettersUsed
+			// Reset the game: Overwrite the phrase list contents; reset the classes on the key buttons; reset the hearts; reset missed and lettersUsed
 			const reset = () => {
 				phraseUl.innerHTML = "";
 				qwertyKeys.forEach(button => (button.className = "key"));
 				hearts.forEach(heart => (heart.src = "images/liveHeart.png"));
-				wrongGuesses = 0;
-				lettersUsed = "";
+				this.missed = 0;
+				this.lettersUsed = "";
 			};
 
 			fadeOutBoard(() => fadeInOverlay(reset, 500), 500);

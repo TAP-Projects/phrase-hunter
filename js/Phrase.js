@@ -1,10 +1,6 @@
 // The Phrase class takes a phrase and provides methods for displaying it on the screen, checking whether an entered letter matches a letter in the phrase, and showing matched letters
 class Phrase {
-	constructor(phrases) {
-		this.lettersInPhrase = this.getRandomPhrase(phrases)
-			.toLowerCase()
-			.trim()
-			.split("");
+	constructor() {
 
 		// Bindings
 		this.addPhraseToDisplay = this.addPhraseToDisplay.bind(this);
@@ -12,17 +8,14 @@ class Phrase {
 		this.showMatchedLetter = this.showMatchedLetter.bind(this);
 	}
 
-	// Get a random phrase from the array of phrases
-	getRandomPhrase(phrases) {
-		return phrases[Math.floor(Math.random() * phrases.length)];
-	}
+	
 
 	// Adds letter placeholders to the display when the game starts.
-	addPhraseToDisplay() {
+	addPhraseToDisplay(lettersInPhrase) {
 		// New fragment to hold placeholder elements
 		const frag = document.createDocumentFragment();
 		// Create placeholder elements and append to frag
-		this.lettersInPhrase.forEach(letter => {
+		lettersInPhrase.forEach(letter => {
 			const li = document.createElement("li");
 			// Test for whether this is a letter or a space
 			const isLetter = /\w/.test(letter);
@@ -38,8 +31,8 @@ class Phrase {
 	}
 
 	// Reveals the letters on the board that match the player's selection b replacing each selected element's 'hide' class with the 'show' class.
-	showMatchedLetter(theClickedLetterText) {
-		this.lettersInPhrase.forEach( (letter, index) => {
+	showMatchedLetter(lettersInPhrase, theClickedLetterText) {
+		lettersInPhrase.forEach( (letter, index) => {
             if(theClickedLetterText === letter){
                 phraseLetterLis[index].className = "show letter " + letter
             }
@@ -47,7 +40,7 @@ class Phrase {
     }
 
 	// Checks to see if the letter selected by the player matches a letter in the phrase
-	checkLetter(theClickedLetterText) {
-		return this.lettersInPhrase.includes(theClickedLetterText);
+	checkLetter(lettersInPhrase, theClickedLetterText) {
+		return lettersInPhrase.includes(theClickedLetterText);
 	}
 }

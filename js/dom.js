@@ -17,6 +17,7 @@ const phraseContainer = document.getElementById("phrase");
 //         	ul
 const phraseUl = document.querySelector("#phrase ul");
 //             	li
+let phraseLetterLis = [];
 //     	div#qwerty.section
 const qwertyContainer = document.getElementById("qwerty");
 //         	div.keyrow
