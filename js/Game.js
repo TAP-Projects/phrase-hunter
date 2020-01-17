@@ -11,10 +11,13 @@ class Game {
 			"oh"
 		];
 
-		// The currently active phrase
-		this.activePhrase = '';
+		// The phrase instance
+		this.activePhrase = null;
 
-		// The letters in the active phrase
+		//! REMOVE The phrase string
+		this.phrase = '';
+
+		//! REMOVE The letters in the phrase
 		this.phraseLetters = [];
 
 		// Letters that have been guessed so far
@@ -36,9 +39,9 @@ class Game {
 		document.getElementById("theBoard").className = "fade-in";
 
 		// Set the active phrase
-		this.activePhrase = this.getRandomPhrase();
+		this.phrase = this.getRandomPhrase();
 		// Set the phrase letters 
-		this.phraseLetters = this.activePhrase.trim().toLowerCase().split("");
+		this.phraseLetters = this.phrase.trim().toLowerCase().split("");
 
 		// Add the phrase to the display
 		currentPhrase.addPhraseToDisplay(this.phraseLetters);

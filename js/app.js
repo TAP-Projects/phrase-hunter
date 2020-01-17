@@ -5,6 +5,7 @@ let currentPhrase;
 gameResetButton.addEventListener('click', () => {
     
     // Create a phrase instance 
+    //! I have to pass in a phrase to the instance
     currentPhrase = new Phrase();
     // Create a game instance
     currentGame = new Game();

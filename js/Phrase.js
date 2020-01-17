@@ -1,6 +1,9 @@
 // The Phrase class takes a phrase and provides methods for displaying it on the screen, checking whether an entered letter matches a letter in the phrase, and showing matched letters
 class Phrase {
-	constructor() {
+	constructor(phrase) {
+
+		// The phrase string
+		this.phrase = phrase.toLowerCase();
 
 		// Bindings
 		this.addPhraseToDisplay = this.addPhraseToDisplay.bind(this);
