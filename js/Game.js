@@ -13,10 +13,6 @@ class Game {
 		// The Phrase class instance
 		this.activePhrase = null;
 
-		//! REMOVE THIS
-		// The letters in the phrase
-		this.phraseLetters = [];
-
 		// Letters that have been guessed so far
 		this.lettersUsed = [];
 
@@ -24,13 +20,13 @@ class Game {
 		this.missed = 0;
 
 		// Bindings
-		//this.getRandomPhrase = this.getRandomPhrase.bind(this);
+		// this.getRandomPhrase = this.getRandomPhrase.bind(this);
 		this.handleInteraction = this.handleInteraction.bind(this);
 	}
 
 	// Create the array of Phrase objects
 	createPhrases(arrayOfPhraseStrings) {
-		arrayOfPhraseStrings.map(phrase => new Phrase(phrase));
+		return arrayOfPhraseStrings.map(phrase => new Phrase(phrase));
 	}
 
 	// Get a random phrase from the array of phrases
@@ -75,16 +71,10 @@ class Game {
 
 		// If the phrase includes the letter, the letter-button gets the 'chosen' class, and the letters in the phrase get 'show'. If not, the letter-button gets the 'wrong' class and we remove a life.
 		if (
-			this.activePhrase.checkLetter(
-				this.phraseLetters,
-				theClickedKeyButtonText
-			)
+			this.activePhrase.checkLetter(theClickedKeyButtonText)
 		) {
 			theKeyButtonLI.className = "key chosen";
-			this.activePhrase.showMatchedLetter(
-				this.phraseLetters,
-				theClickedKeyButtonText
-			);
+			this.activePhrase.showMatchedLetter(theClickedKeyButtonText);
 			if (this.checkForWin()) this.gameOver("won");
 		} else {
 			if (theKeyButtonLI) theKeyButtonLI.className = "key wrong";
@@ -161,15 +151,12 @@ class Game {
 		// Fade in the board
 		document.getElementById("theBoard").style.display = "block";
 		document.getElementById("theBoard").className = "fade-in";
-		
+
 		// Set the active Phrase object
 		this.activePhrase = this.getRandomPhrase(this.phrases);
 
-		// Set the phrase letters
-		this.phraseLetters = activePhrase.phrase.split("");
-
 		// Add the phrase to the display
-		this.activePhrase.addPhraseToDisplay(this.phraseLetters);
+		this.activePhrase.addPhraseToDisplay();
 
 		// Hide the overlay
 		overlay.className = "";

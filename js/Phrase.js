@@ -3,7 +3,10 @@ class Phrase {
 	constructor(phrase) {
 
 		// The phrase string
-		//this.phrase = phrase.toLowerCase();
+		this.phrase = phrase.toLowerCase();
+
+		// Get an array of the phrase's letters
+		this.lettersInPhrase = this.phrase.split("");
 
 		// Bindings
 		this.addPhraseToDisplay = this.addPhraseToDisplay.bind(this);
@@ -14,11 +17,11 @@ class Phrase {
 	
 
 	// Adds letter placeholders to the display when the game starts.
-	addPhraseToDisplay(lettersInPhrase) {
+	addPhraseToDisplay() {
 		// New fragment to hold placeholder elements
 		const frag = document.createDocumentFragment();
 		// Create placeholder elements and append to frag
-		lettersInPhrase.forEach(letter => {
+		this.lettersInPhrase.forEach(letter => {
 			const li = document.createElement("li");
 			// Test for whether this is a letter or a space
 			const isLetter = /\w/.test(letter);
@@ -34,8 +37,8 @@ class Phrase {
 	}
 
 	// Reveals the letters on the board that match the player's selection b replacing each selected element's 'hide' class with the 'show' class.
-	showMatchedLetter(lettersInPhrase, theClickedLetterText) {
-		lettersInPhrase.forEach( (letter, index) => {
+	showMatchedLetter(theClickedLetterText) {
+		this.lettersInPhrase.forEach( (letter, index) => {
             if(theClickedLetterText === letter){
                 phraseLetterLis[index].className = "show letter " + letter
             }
@@ -43,7 +46,7 @@ class Phrase {
     }
 
 	// Checks to see if the letter selected by the player matches a letter in the phrase
-	checkLetter(lettersInPhrase, theClickedLetterText) {
-		return lettersInPhrase.includes(theClickedLetterText);
+	checkLetter(theClickedLetterText) {
+		return this.lettersInPhrase.includes(theClickedLetterText);
 	}
 }
