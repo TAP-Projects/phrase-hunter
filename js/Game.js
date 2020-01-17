@@ -1,20 +1,20 @@
 // The Game class manages the game.
 class Game {
 	constructor() {
-		
 		// Possible phrases
-		this.phrases = [
+		this.phrases = this.createPhrases([
 			"love peace and harmony",
 			"oh very nice very nice very nice",
 			"oh but maybe in the next world",
 			"maybe in the next world",
 			"oh"
-		];
+		]);
 
 		// The Phrase class instance
 		this.activePhrase = null;
 
-		//! REMOVE The letters in the phrase
+		//! REMOVE THIS
+		// The letters in the phrase
 		this.phraseLetters = [];
 
 		// Letters that have been guessed so far
@@ -24,37 +24,22 @@ class Game {
 		this.missed = 0;
 
 		// Bindings
-		this.getRandomPhrase = this.getRandomPhrase.bind(this);
+		//this.getRandomPhrase = this.getRandomPhrase.bind(this);
 		this.handleInteraction = this.handleInteraction.bind(this);
 	}
 
-	// Start the game
-	startGame() {
-
-		// Fade in the board
-		document.getElementById("theBoard").style.display = "block";
-		document.getElementById("theBoard").className = "fade-in";
-
-		// Set the active phrase
-		const phrase = this.getRandomPhrase();
-		// Set the phrase letters 
-		this.phraseLetters = phrase.trim().toLowerCase().split("");
-
-		// Add the phrase to the display
-		currentPhrase.addPhraseToDisplay(this.phraseLetters);
-
-		// Hide the overlay
-		overlay.className = ""
+	// Create the array of Phrase objects
+	createPhrases(arrayOfPhraseStrings) {
+		arrayOfPhraseStrings.map(phrase => new Phrase(phrase));
 	}
 
 	// Get a random phrase from the array of phrases
-	getRandomPhrase() {
-		return this.phrases[Math.floor(Math.random() * this.phrases.length)];
+	getRandomPhrase(arrayOfPhraseObjects) {
+		return arrayOfPhraseObjects[Math.floor(Math.random() * arrayOfPhraseObjects.length)];
 	}
 
 	// handleInteraction is called in app.js by the letter-button event listener. The event target is the letter-button that  was just pressed/clicked. handleInteraction decorates the key using either the 'chosen' class or 'wrong' class depending on whether the key that was pressed/clicked is in the phrase. In the former case, it calls showMatchedLetter, and in latter case, it calls removeLife.
 	handleInteraction(e) {
-
 		// These will stand in for both click and keyboard events
 		let theKeyButtonLI, theClickedKeyButtonText;
 
@@ -68,7 +53,7 @@ class Game {
 			// If the area clicked wasn't a button, exit the function.
 			if (theKeyButtonLI.nodeName !== "BUTTON") return;
 
-		// Keydown			
+			// Keydown
 		} else if (e.type === "keydown") {
 			// Get the letter value from the key property
 			theClickedKeyButtonText = e.key;
@@ -83,18 +68,26 @@ class Game {
 		if (this.lettersUsed.includes(theClickedKeyButtonText)) return;
 
 		// Reset the letter button's class
-		if(theKeyButtonLI) theKeyButtonLI.className = "key";
+		if (theKeyButtonLI) theKeyButtonLI.className = "key";
 
 		// Add the letter to our list of used letters
 		this.lettersUsed += theClickedKeyButtonText;
 
 		// If the phrase includes the letter, the letter-button gets the 'chosen' class, and the letters in the phrase get 'show'. If not, the letter-button gets the 'wrong' class and we remove a life.
-		if (currentPhrase.checkLetter(this.phraseLetters, theClickedKeyButtonText)) {
+		if (
+			this.activePhrase.checkLetter(
+				this.phraseLetters,
+				theClickedKeyButtonText
+			)
+		) {
 			theKeyButtonLI.className = "key chosen";
-			currentPhrase.showMatchedLetter(this.phraseLetters, theClickedKeyButtonText);
+			this.activePhrase.showMatchedLetter(
+				this.phraseLetters,
+				theClickedKeyButtonText
+			);
 			if (this.checkForWin()) this.gameOver("won");
 		} else {
-			if(theKeyButtonLI) theKeyButtonLI.className = "key wrong";
+			if (theKeyButtonLI) theKeyButtonLI.className = "key wrong";
 			this.removeLife();
 		}
 	}
@@ -161,5 +154,24 @@ class Game {
 
 			fadeOutBoard(() => fadeInOverlay(reset, 500), 500);
 		}, 1000);
+	}
+
+	// Start the game
+	startGame() {
+		// Fade in the board
+		document.getElementById("theBoard").style.display = "block";
+		document.getElementById("theBoard").className = "fade-in";
+		
+		// Set the active Phrase object
+		this.activePhrase = this.getRandomPhrase(this.phrases);
+
+		// Set the phrase letters
+		this.phraseLetters = activePhrase.phrase.split("");
+
+		// Add the phrase to the display
+		this.activePhrase.addPhraseToDisplay(this.phraseLetters);
+
+		// Hide the overlay
+		overlay.className = "";
 	}
 }

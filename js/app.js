@@ -1,12 +1,8 @@
 let game;
-let currentPhrase;
 
 // On button click, create a new phrase, display it, then create a n new game, and start it.
 gameResetButton.addEventListener('click', () => {
     
-    // Create a phrase instance 
-    //! I have to pass in a phrase to the instance
-    currentPhrase = new Phrase();
     // Create a game instance
     game = new Game();
     
