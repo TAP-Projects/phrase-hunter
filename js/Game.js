@@ -11,11 +11,8 @@ class Game {
 			"oh"
 		];
 
-		// The phrase instance
+		// The Phrase class instance
 		this.activePhrase = null;
-
-		//! REMOVE The phrase string
-		this.phrase = '';
 
 		//! REMOVE The letters in the phrase
 		this.phraseLetters = [];
@@ -39,9 +36,9 @@ class Game {
 		document.getElementById("theBoard").className = "fade-in";
 
 		// Set the active phrase
-		this.phrase = this.getRandomPhrase();
+		const phrase = this.getRandomPhrase();
 		// Set the phrase letters 
-		this.phraseLetters = this.phrase.trim().toLowerCase().split("");
+		this.phraseLetters = phrase.trim().toLowerCase().split("");
 
 		// Add the phrase to the display
 		currentPhrase.addPhraseToDisplay(this.phraseLetters);
@@ -97,7 +94,7 @@ class Game {
 			currentPhrase.showMatchedLetter(this.phraseLetters, theClickedKeyButtonText);
 			if (this.checkForWin()) this.gameOver("won");
 		} else {
-			theKeyButtonLI.className = "key wrong";
+			if(theKeyButtonLI) theKeyButtonLI.className = "key wrong";
 			this.removeLife();
 		}
 	}
@@ -122,8 +119,8 @@ class Game {
 	// gameOver() takes a string parameter indicating a win or loss and shows the overlay with an appropriate message. There's a lot of timing and callbacks going on here. See the README for my comments.
 	gameOver(winLose) {
 		// No funny business
-		qwertyContainer.removeEventListener("click", currentGame.handleInteraction);
-		document.removeEventListener("keydown", currentGame.handleInteraction);
+		qwertyContainer.removeEventListener("click", game.handleInteraction);
+		document.removeEventListener("keydown", game.handleInteraction);
 
 		setTimeout(() => {
 			// Fade out the game board

@@ -3,7 +3,7 @@ class Phrase {
 	constructor(phrase) {
 
 		// The phrase string
-		this.phrase = phrase.toLowerCase();
+		//this.phrase = phrase.toLowerCase();
 
 		// Bindings
 		this.addPhraseToDisplay = this.addPhraseToDisplay.bind(this);
