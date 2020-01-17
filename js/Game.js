@@ -50,7 +50,7 @@ class Game {
 			if (theKeyButtonLI.nodeName !== "BUTTON") return;
 
 			// Keydown
-		} else if (e.type === "keydown") {
+		} else if (e.type === "keydown" && (e.key >= "a" && e.key <= "z")) {
 			// Get the letter value from the key property
 			theClickedKeyButtonText = e.key;
 
@@ -58,6 +58,8 @@ class Game {
 			theKeyButtonLI = [...qwertyKeys].find(
 				keyButton => keyButton.textContent === theClickedKeyButtonText
 			);
+		} else {
+			return;
 		}
 
 		// If the letter clicked has been clicked previously, exit the function.
@@ -130,6 +132,8 @@ class Game {
 					gameOverMessage.textContent =
 						"You lost! Better luck next time.";
 				}
+				// Move focus back to start button
+				gameResetButton.focus();
 				setTimeout(cb, timer);
 			};
 
@@ -148,6 +152,7 @@ class Game {
 
 	// Start the game
 	startGame() {
+		
 		// Fade in the board
 		document.getElementById("theBoard").style.display = "block";
 		document.getElementById("theBoard").className = "fade-in";
