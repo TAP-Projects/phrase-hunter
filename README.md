@@ -5,7 +5,7 @@ NOTE: This project is a part of Treehouse's Full-Stack Web Development Techdegre
 ## What is this?
 Phrase Hunter is a simple 'Wheel of Fortune' -like guessing game that demonstrates some principles of object oriented programming in JavaScript.
 
-Play here: https://julianjohannesen.github.io/phrase-hunter/
+Play here: https://tap-projects.github.io/phrase-hunter/
 
 ## Playing the Game
 Your goal is to guess all the letters in a hidden, random phrase. At the beginning, you'll only sees the number of letters and words in the phrase, represented by blank boxes on the screen.
